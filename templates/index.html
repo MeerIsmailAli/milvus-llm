@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>title</title>
+    <script>
+        async function submitQuestion(event) {
+            event.preventDefault();
+
+            const question = document.getElementById('question').value;
+            const responseDiv = document.getElementById('response');
+
+            if (question.trim() === "") {
+                responseDiv.innerHTML = "Please enter a question.";
+                return;
+            }
+
+            try {
+                const response = await fetch('/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: question })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    responseDiv.innerHTML = `Response: ${data.response}`;
+                } else {
+                    responseDiv.innerHTML = "Error: Failed to get a response.";
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                responseDiv.innerHTML = "Error: Unable to connect to the server.";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>upload a pdf</h1>
+    <form action = "/upload" method = "post" enctype="multipart/form-data">   
+        <input type="file" name="file" />   
+        <input type = "submit" value="Upload">   
+    </form>
+
+    <h1>Ask a Question</h1>
+    <form id="queryForm">
+        <label for="question">Question:</label>
+        <input type="text" id="question" name="question" required>
+        <button type="submit">Submit</button>
+    </form>
+    <h2>Response</h2>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('queryForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const question = document.getElementById('question').value;
+            fetch('/query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ question: question }),
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('response').innerText = data;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                document.getElementById('response').innerText = 'An error occurred';
+            });
+        });
+    </script>
+    </body>
+</html>
