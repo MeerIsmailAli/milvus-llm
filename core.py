@@ -38,7 +38,7 @@ def process(question):
 
     prompt = hub.pull("rlm/rag-prompt")
     llm = Ollama(
-        model="mistral",
+        model="llama3",
         stop=["<|eot_id|>"],
         )
     rag_chain = (
