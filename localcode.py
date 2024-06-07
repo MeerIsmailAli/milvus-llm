@@ -53,8 +53,8 @@ all_splits = text_splitter.split_documents(data)
 
 # print(all_splits)
 
-vectorstore = Milvus.from_documents(documents=all_splits, embedding=embeddings.ollama.OllamaEmbeddings(model='nomic-embed-text'), collection_name="verynew") #test
-retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+vectorstore = Milvus.from_documents(documents=all_splits, embedding=embeddings.ollama.OllamaEmbeddings(model='all-minilm'), collection_name="testing") #test
+retriever = vectorstore.as_retriever(search_kwargs={"k": 10})
 # prompt = hub.pull("rlm/rag-prompt")
 # mxbai-embed-large	334M
 # nomic-embed-text	137M
